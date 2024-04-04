@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <h3 class="gem">Gemini</h3>
+        <button class="navbtn">User</button>
+    </nav>
+
+    <div class="mszBox">
+        <div class="userMsz">Hello, User</div>
+        <div class="botMsz">How can I help you today?</div>
+        <div class="flemsz">
+            <p class="para">Give me phrases to learn a new language</p>
+            <p class="para">Finish my gaming podcast tagline: play, win, and ....</p>
+            <p class="para">Plan a low-carb meal with what's available in my fridge</p>
+            <p class="para">Act like Mowgli from The Jungle Book and answer questions</p>
+        </div>
+    </div>
+
+    
+
+    <div class="userInputDiv">
+        <input type="text" placeholder="Enter a prompt here" class="userInput">
+        <button class="btn">Send</button>
+    </div>
+
+
+
+    <script type="importmap">
+        {
+          "imports": {
+            "@google/generative-ai": "https://esm.run/@google/generative-ai"
+          }
+        }
+    </script>
+
+    <script type="module">
+        import { GoogleGenerativeAI } from "@google/generative-ai";
+        const API_KEY = "AIzaSyD3w8HXx14aMGVMjwgG2Q-DWmHY26N_5bs";
+
+        const genAI = new GoogleGenerativeAI(API_KEY);
+
+        document.querySelector(".btn").addEventListener("click", run)
+
+        async function run() {
+        const model = genAI.getGenerativeModel({ model: "gemini-pro"});
+
+        let userInput = document.querySelector(".userInput").value;
+        let userMszDisplayDiv = document.createElement('div');
+        userMszDisplayDiv.className = 'UserMsz';
+        userMszDisplayDiv.textContent = `User: ${userInput}`;
+        document.querySelector(".mszBox").appendChild(userMszDisplayDiv);
+        const prompt = userInput;
+
+        const result = await model.generateContent(prompt);
+        const response = await result.response;
+        const text = response.text();
+        console.log(text);
+        let botMszDiv = document.createElement("div");
+        botMszDiv.textContent = `Bot:- ${text}`;
+        document.querySelector(".mszBox").appendChild(botMszDiv);
+        }
+
+        run();
+    </script>
+</body>
+</html>
